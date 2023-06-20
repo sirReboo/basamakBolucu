@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <input type="number" id="sayi" placeholder="Sayıyı girin">
+  <link rel="stylesheet" href="./indexv3.css">
+
+  <button onclick="hesapla()" style="font-weight: bold;">Hesapla</button>
+
+  <div id="sonuc"></div>
+
+  <script>
+    function bol(sayi) {
+      const harfler = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+      let harfList = [];
+      let temelSayi = sayi;
+
+      while (temelSayi > 0) {
+        let rakam = temelSayi % 10;
+          let harf = harfler[rakam];
+          harfList.push(harf);
+    
+        temelSayi = Math.floor(temelSayi / 10);
+      }
+
+      return harfList.reverse();
+    }
+
+    function hesapla() {
+        
+      const sayi = Number(document.getElementById("sayi").value);
+      const sonuc = bol(sayi);
+      var sonucBasamak = basamakFonksiyon(sayi);
+
+      const sonucDiv = document.getElementById("sonuc");
+
+      var basamakList = document.createElement("p");
+      sonucDiv.innerHTML+= `<br> <strong>${sayi}</strong> Sayısının Basamakları: <strong>${sonucBasamak.basamakList}</strong>`;
+      sonucDiv.innerHTML += `<hr></hr>`;
+      var guncelSonucToplam = 0;
+      for (var i = 0; i <= 3; i++) {
+        const guncelSonuc = (sayi % sonuc[i] === 0 ? 1 : 0);
+        guncelSonucToplam += guncelSonuc;
+        if (sayi % sonuc[i] === 0) {
+          var tamBolunebilenler = 0; // initialize to zero
+          sonucDiv.innerHTML += `<p> <strong>${sayi}</strong> Sayısı <strong>${sonuc[i]}</strong> ile tam bölündüğü için <strong>${guncelSonuc}</strong> dir. </p>`;
+          tamBolunebilenler += sonuc[i]; // add to sum
+        } else {
+          sonucDiv.innerHTML += `<p> <strong>${sayi}</strong> Sayısı <strong>${sonuc[i]}</strong> ile tam bölünmediği için <strong>${guncelSonuc}</strong> dir. </p>`;
+        }
+
+      }
+      sonucDiv.innerHTML += `<p>Sonuç olarak cevap <strong>${guncelSonucToplam}</strong> dönmelidir.</p>`;
+    }
+
+    function basamakFonksiyon(sayi) {
+      sayi = Math.abs(sayi);
+      var sayiStr = sayi.toString();
+      var bolum = 0;
+      var basamakList = [];
+
+      for (var i = 0; i < sayiStr.length; i++) {
+        var basamak = parseInt(sayiStr.charAt(i));
+        if (basamak !== 0) {
+          bolum += sayi / basamak;
+        }
+        basamakList.push(basamak);
+      }
+
+      var x = basamakList[0];
+      var mesaj = (sayi % x === 0) ? 1 : 2;
+
+      return {
+        basamakList: basamakList.join(", "),
+        bolum: bolum,
+        mesaj: mesaj
+      };
+    }
+    
+  </script>
+</body>
+</html>
